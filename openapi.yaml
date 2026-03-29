@@ -1,0 +1,1033 @@
+openapi: 3.0.0
+info:
+  title: API
+  description: ""
+  version: 1.0.0
+servers:
+- url: http://localhost:3000
+- url: ""
+paths:
+  /api/admin/:
+    put:
+      tags:
+      - Admin Tests
+      summary: Make Admin
+      parameters:
+      - name: Authorization
+        in: header
+        description: admin
+        required: false
+        schema:
+          type: string
+        example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjAsInVzZXJuYW1lIjoic3lzdGVtdXNlciIsInVzZXJFbWFpbCI6InN5c3RlbUBtYWlsLmNvbSIsImlhdCI6MTc3MjM0MjM2MCwiZXhwIjoxNzcyMzc4MzYwfQ._3pGAjloQueV89C9FwgsubjMF--zZeEZ1_pyN8O1uWc
+      responses:
+        "200":
+          description: succesful
+      security:
+      - BearerAuth: []
+  /api/admin/user/ban:
+    put:
+      tags:
+      - Admin Tests
+      summary: Ban
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/user_ban_body"
+            example:
+              uid: 2
+      responses:
+        "200":
+          description: succesful
+      security:
+      - BearerAuth: []
+  /api/admin/user/unban:
+    put:
+      tags:
+      - Admin Tests
+      summary: Unban
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/user_unban_body"
+            example:
+              uid: 1
+      responses:
+        "200":
+          description: succesful
+      security:
+      - BearerAuth: []
+  /api/admin/appeal/approve:
+    put:
+      tags:
+      - Admin Tests
+      summary: Approve Appeal
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/appeal_approve_body"
+            example:
+              uid: 2
+      responses:
+        "200":
+          description: succesful
+      security:
+      - BearerAuth: []
+  /api/admin/appeal/reject:
+    put:
+      tags:
+      - Admin Tests
+      summary: Reject Appeal
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/appeal_reject_body"
+            example:
+              uid: 2
+      responses:
+        "200":
+          description: succesful
+      security:
+      - BearerAuth: []
+  /api/admin/appeal:
+    get:
+      tags:
+      - Admin Tests
+      summary: Get all Appeals
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+      responses:
+        "200":
+          description: succesful
+      security:
+      - BearerAuth: []
+  /api/admin/report:
+    get:
+      tags:
+      - Admin Tests
+      summary: Get All Reports
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+      responses:
+        "200":
+          description: succesful
+      security:
+      - BearerAuth: []
+  /api/admin/report/2:
+    get:
+      tags:
+      - Admin Tests
+      summary: Get All Reports of User uid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+      responses:
+        "200":
+          description: succesful
+      security:
+      - BearerAuth: []
+  /api/admin/report/approve:
+    put:
+      tags:
+      - Admin Tests
+      summary: Approve Report
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/report_approve_body"
+            example:
+              rid: 2
+      responses:
+        "200":
+          description: succesful
+      security:
+      - BearerAuth: []
+  /api/admin/report/dismiss:
+    put:
+      tags:
+      - Admin Tests
+      summary: Dismiss Report
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/report_dismiss_body"
+            example:
+              rid: 3
+      responses:
+        "200":
+          description: succesful
+      security:
+      - BearerAuth: []
+  /api/admin:
+    put:
+      tags:
+      - Admin Tests
+      summary: Make Admin
+      responses:
+        "200":
+          description: Succesful
+      security:
+      - BearerAuth: []
+  /api/user/signup:
+    post:
+      tags:
+      - User Tests
+      summary: Make User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/user_signup_body"
+            example:
+              email: testemail2@mail.com
+              username: testuser2
+              password: "123456"
+      responses:
+        "200":
+          description: succesful
+  /api/user/login:
+    post:
+      tags:
+      - User Tests
+      summary: Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: |-
+              //{
+              //    "email": "system@admin.com",
+              //    "password": "password"
+
+              //}
+
+               {
+                   "email": "testemail2@mail.com",
+                   "password": "123456"
+
+               }
+      responses:
+        "200":
+          description: succesful
+  /api/user/2/follow:
+    put:
+      tags:
+      - User Tests
+      summary: Follow User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/2_follow_body"
+            example:
+              follow: 1
+      responses:
+        "200":
+          description: succesful
+      security:
+      - BearerAuth: []
+  /api/user/2/unfollow:
+    put:
+      tags:
+      - User Tests
+      summary: Unfollow User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/2_unfollow_body"
+            example:
+              follow: 2
+      responses:
+        "200":
+          description: succesful
+      security:
+      - BearerAuth: []
+  /api/user/1/removefollower:
+    put:
+      tags:
+      - User Tests
+      summary: Remove User from Followers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/1_removefollower_body"
+            example:
+              follow: 2
+      responses:
+        "200":
+          description: succesful
+      security:
+      - BearerAuth: []
+  /api/user/2/appeal:
+    put:
+      tags:
+      - User Tests
+      summary: Create Appeal
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/2_appeal_body"
+            example:
+              appeal: ' Please God Save Me'
+      responses:
+        "200":
+          description: succesful
+      security:
+      - BearerAuth: []
+  /api/user:
+    get:
+      tags:
+      - User Tests
+      summary: Get all Users
+      responses:
+        "200":
+          description: succesful
+  /api/user/1:
+    get:
+      tags:
+      - User Tests
+      summary: Get User with UserID
+      responses:
+        "200":
+          description: succesful
+  /api/sports/matches:
+    get:
+      tags:
+      - Zeli Tests
+      summary: matches
+      responses:
+        "200":
+          description: succesful
+  /api/sports/standings:
+    get:
+      tags:
+      - Zeli Tests
+      summary: standings
+      responses:
+        "200":
+          description: succesful
+  /api/social/threads:
+    get:
+      tags:
+      - Thread Tests
+      - Pull tests
+      summary: "search thread by title, owner, team, tags"
+      parameters:
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+        example: bar
+      - name: title
+        in: query
+        required: false
+        schema:
+          type: boolean
+        example: "true"
+      - name: author
+        in: query
+        required: false
+        schema:
+          type: boolean
+        example: "false"
+      - name: team
+        in: query
+        required: false
+        schema:
+          type: boolean
+        example: "false"
+      - name: tags
+        in: query
+        required: false
+        schema:
+          type: boolean
+        example: "false"
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: "Bearer {{accessToken}}"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: succesful
+    post:
+      tags:
+      - Thread Tests
+      - Creation Tests
+      summary: New General Thread
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: "Bearer {{accessToken}}"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/social_threads_body"
+            example:
+              title: test
+              text: test
+              tags:
+              - a
+              - b
+              - c
+      responses:
+        "200":
+          description: succesful
+    delete:
+      tags:
+      - Thread Tests
+      - Delete tests
+      summary: Delete thread
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: "Bearer {{accessToken}}"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/social_threads_body_1"
+            example:
+              tid: 1
+      responses:
+        "200":
+          description: succesful
+  /api/social/threads/team/2:
+    get:
+      tags:
+      - Thread Tests
+      - Pull tests
+      summary: pull threads from a team forum
+      responses:
+        "200":
+          description: succesful
+  /api/social/threads/match:
+    get:
+      tags:
+      - Thread Tests
+      - Pull tests
+      summary: pull all match threads
+      responses:
+        "200":
+          description: succesful
+  /api/social/threads/general:
+    get:
+      tags:
+      - Thread Tests
+      - Pull tests
+      summary: pull all general threads
+      responses:
+        "200":
+          description: succesful
+  /api/social/threads/1:
+    get:
+      tags:
+      - Thread Tests
+      - Pull tests
+      summary: pull all comments and polls for a thread
+      responses:
+        "200":
+          description: succesful
+    put:
+      tags:
+      - Thread Tests
+      - Edit tests
+      summary: update thread
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: "Bearer {{accessToken}}"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/threads_1_body"
+            example:
+              title: edit test342
+              text: "123"
+              tags:
+              - a
+      responses:
+        "200":
+          description: succesful
+  /api/social/user/1:
+    get:
+      tags:
+      - Thread Tests
+      - Pull tests
+      summary: "pull all threads,comments,polls that a user posted"
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: "Bearer {{accessToken}}"
+      responses:
+        "200":
+          description: succesful
+  /api/social/threads/-1:
+    put:
+      tags:
+      - Thread Tests
+      - Edit tests
+      summary: (Test) update a non existent thread
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: "Bearer {{accessToken}}"
+      responses:
+        "404":
+          description: Non-Existent Thread
+  /api/social/comments:
+    post:
+      tags:
+      - Comment Tests
+      - post tests
+      summary: Create comment
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: "Bearer {{accessToken}}"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/social_comments_body"
+            example:
+              text: test
+              threadId: 20
+      responses:
+        "200":
+          description: succesful
+    delete:
+      tags:
+      - Comment Tests
+      - delete tests
+      summary: Delete Comment
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: "Bearer {{accessToken}}"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/social_comments_body_1"
+            example:
+              cid: 9
+      responses:
+        "200":
+          description: succesful
+  /api/social/comments/1:
+    put:
+      tags:
+      - Comment Tests
+      - update tests
+      summary: Update Comment
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: "Bearer {{accessToken}}"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/comments_1_body"
+            example:
+              text: new updated text
+      responses:
+        "200":
+          description: succesful
+  /api/social/comments/-1:
+    put:
+      tags:
+      - Comment Tests
+      - update tests
+      summary: (Test) Update Comment - non existent comment
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: "Bearer {{accessToken}}"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/comments_1_body_1"
+            example:
+              text: new updated text
+      responses:
+        "404":
+          description: Non-Existent Comment
+  /api/social/polls:
+    post:
+      tags:
+      - poll tests
+      - Creation tests
+      summary: Create new poll
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: "Bearer {{accessToken}}"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/social_polls_body"
+            example:
+              commentID: 10
+              deadline: 2026-12-12T05:26:24.101Z
+              option1: apple123
+      responses:
+        "200":
+          description: succesful
+    delete:
+      tags:
+      - poll tests
+      - DEL
+      summary: Delete Poll
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: "Bearer {{accessToken}}"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/social_polls_body_1"
+            example:
+              pid: 10
+      responses:
+        "200":
+          description: succesful
+  /api/social/polls/3:
+    put:
+      tags:
+      - poll tests
+      - PUT
+      summary: Update Poll
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: "Bearer {{accessToken}}"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/polls_3_body"
+            example:
+              option1: test
+      responses:
+        "200":
+          description: succesful
+  /api/social/polls/vote/10:
+    put:
+      tags:
+      - poll tests
+      - PUT
+      summary: Vote on a poll
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: "Bearer {{accessToken}}"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/vote_10_body"
+            example:
+              option: 1
+      responses:
+        "200":
+          description: succesful
+  /api/social/polls/-1:
+    put:
+      tags:
+      - poll tests
+      - PUT
+      summary: (test)Update Poll - non existent pid
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: "Bearer {{accessToken}}"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/polls_1_body"
+            example:
+              option1: test
+      responses:
+        "404":
+          description: Non-Existent Poll
+  /api/social/polls/vote/3:
+    put:
+      tags:
+      - poll tests
+      - PUT
+      summary: (Test) Vote on a poll - out of range
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: "Bearer {{accessToken}}"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/vote_3_body"
+            example:
+              option: 10
+      responses:
+        "404":
+          description: Invalid Poll Choice
+  /api/social/polls/vote/-1:
+    put:
+      tags:
+      - poll tests
+      - PUT
+      summary: (Test) Vote on a poll - non existent pid
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: "Bearer {{accessToken}}"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/vote_1_body"
+            example:
+              option: 1
+      responses:
+        "404":
+          description: Non-Existent Poll
+  /api/social/moderation:
+    post:
+      tags:
+      - moderation
+      summary: Report Thread
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: "Bearer {{accessToken}}"
+      responses:
+        "200":
+          description: succesful
+  /:
+    get:
+      tags:
+      - moderation
+      summary: Report Comment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/body"
+            example:
+              cid: 1
+              text: profanity
+      responses:
+        "200":
+          description: succesful
+  /api/translator:
+    get:
+      tags:
+      - translate
+      summary: Translate comment/thread
+      parameters:
+      - name: tid
+        in: query
+        required: false
+        schema:
+          type: integer
+        example: "42"
+      - name: cid
+        in: query
+        required: false
+        schema:
+          type: integer
+        example: "1"
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: "Bearer {{accessToken}}"
+      responses:
+        "200":
+          description: succesful
+  /api/digest:
+    get:
+      tags:
+      - daily digest
+      summary: Get digest
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: "Bearer {{accessToken}}"
+      responses:
+        "200":
+          description: succesful
+  /api/refresh:
+    get:
+      summary: Refresh
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjAsInVzZXJuYW1lIjoic3lzdGVtdXNlciIsInVzZXJFbWFpbCI6InN5c3RlbUBtYWlsLmNvbSIsImlhdCI6MTc3MjMzNzE0OCwiZXhwIjoxNzcyMzUxNTQ4fQ.qDwyUJ8gHehHRXm3mN5EXjmdDSPNTwNxy0ebrne3_vE
+      responses:
+        "200":
+          description: succesful
+      security:
+      - BearerAuth: []
+components:
+  schemas:
+    "2_appeal_body":
+      type: object
+      properties:
+        appeal:
+          type: string
+    comments_1_body:
+      type: object
+      properties:
+        text:
+          type: string
+    user_unban_body:
+      type: object
+      properties:
+        uid:
+          type: integer
+    "2_follow_body":
+      type: object
+      properties:
+        follow:
+          type: integer
+    appeal_reject_body:
+      type: object
+      properties:
+        uid:
+          type: integer
+    social_polls_body_1:
+      type: object
+      properties:
+        pid:
+          type: integer
+    body:
+      type: object
+      properties:
+        cid:
+          type: integer
+        text:
+          type: string
+    user_signup_body:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        username:
+          type: string
+        password:
+          type: string
+    appeal_approve_body:
+      type: object
+      properties:
+        uid:
+          type: integer
+    social_polls_body:
+      type: object
+      properties:
+        commentID:
+          type: integer
+        deadline:
+          type: string
+          format: date-time
+        option1:
+          type: string
+        option2:
+          nullable: true
+        option3:
+          nullable: true
+        option4:
+          nullable: true
+    user_ban_body:
+      type: object
+      properties:
+        uid:
+          type: integer
+    social_threads_body_1:
+      type: object
+      properties:
+        tid:
+          type: integer
+    vote_3_body:
+      type: object
+      properties:
+        option:
+          type: integer
+    "1_removefollower_body":
+      type: object
+      properties:
+        follow:
+          type: integer
+    polls_1_body:
+      type: object
+      properties:
+        option1:
+          type: string
+    social_comments_body:
+      type: object
+      properties:
+        text:
+          type: string
+        threadId:
+          type: integer
+    social_comments_body_1:
+      type: object
+      properties:
+        cid:
+          type: integer
+    comments_1_body_1:
+      type: object
+      properties:
+        text:
+          type: string
+    vote_10_body:
+      type: object
+      properties:
+        option:
+          type: integer
+    "2_unfollow_body":
+      type: object
+      properties:
+        follow:
+          type: integer
+    social_threads_body:
+      type: object
+      properties:
+        title:
+          type: string
+        text:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+    report_approve_body:
+      type: object
+      properties:
+        rid:
+          type: integer
+    report_dismiss_body:
+      type: object
+      properties:
+        rid:
+          type: integer
+    vote_1_body:
+      type: object
+      properties:
+        option:
+          type: integer
+    threads_1_body:
+      type: object
+      properties:
+        title:
+          type: string
+        text:
+          type: string
+          format: color
+        tags:
+          type: array
+          items:
+            type: string
+    polls_3_body:
+      type: object
+      properties:
+        option1:
+          type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

@@ -1,0 +1,259 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+  output   = "./generated"
+}
+
+datasource db {
+  provider = "postgres"
+  url=env("POSTGRES_URL")
+}
+model User {
+  uid       Int @id @default(autoincrement())
+  email     String @unique
+  password  String  // hashed
+  username  String @unique
+
+  avatar    String  @default("") // "photo.png"
+  fav       Team?   @relation(fields: [favId], references: [tid])
+  favId     Int?
+  threads   Threads[]
+  posts     Comment[]   @relation("UserPosts")
+  //replies   Comment[]   @relation("UserReplies")
+
+  role      String  @default("user")  // user or admin
+
+  followed   Follow[] @relation("following")
+  followers  Follow[]  @relation("followers")
+  votes PollVotes[]
+  appeal    String? //MIGHT NEED TO PUT THIS SOMEWHERE ELSE
+  isBan     Boolean @default(false)
+  reports   Reports[]
+  createdAt DateTime  @default(now())
+
+}
+
+model Follow {
+  user  User  @relation("following", fields: [userId], references: [uid])
+  userId  Int
+
+  follow  User @relation("followers", fields: [followId], references: [uid])  // user wants to follow this person
+  followId  Int
+
+  followTime    DateTime  @default(now())
+  @@id([userId, followId]) // prevents multiple of the same follow
+
+}
+
+
+model Team {
+  tid         Int @id // football-data id
+  logo        String  @default("") // "photo.png"
+  homeGames   Matches[] @relation("HomeMatches")
+  awayGames   Matches[] @relation("AwayMatches")
+  name        String
+  position    Int @default(0)
+  wins        Int @default(0)
+  losses      Int @default(0)
+  draws       Int @default(0)
+  playedGames Int @default(0)
+  points      Int @default(0)
+  goalsFor    Int @default(0)
+  goalsAgainst  Int @default(0)
+  follwers    User[]    // users who are following this team  // relation
+  threads     Threads[] 
+  venue       String 
+}
+
+
+model Matches {
+  mid       Int @id // football-data id
+  homeTeam     Team  @relation("HomeMatches", fields: [team1Id], references: [tid])
+  team1Id   Int
+  awayTeam     Team @relation("AwayMatches", fields: [team2Id], references: [tid])
+  team2Id   Int
+
+  date      DateTime
+  venue     String
+  matchday  Int? 
+  status    String   @default("") // optional but useful: TIMED, FINISHED, etc.
+  homeScore    Int?
+  awayScore    Int?
+  stage     String
+  thread    Threads?  @relation("threadMatch", fields: [threadId], references: [tid])
+  threadId  Int?   @unique //optional due to matches that are beyond 2 weeks
+  sent1     Int?    //team 1 sentiment
+  sent2     Int?    //team 2 sentiment
+}
+
+model Threads {
+  tid       Int @id @default(autoincrement())
+
+  comments  Comment[]
+  match     Matches? @relation("threadMatch")
+  edits     ThreadEdits[]
+  reports   Reports[]
+  owner     User  @relation(fields: [ownerId], references: [uid])
+  ownerId   Int
+  team      Team? @relation(fields: [teamId], references: [tid])
+  teamId    Int?
+
+  title     String
+  date      DateTime @default(now())
+  closed    Boolean  @default(false)
+  text      String    // text of main post
+  tags      String  @default("")  // In the form of "tag1,tag2,tag3..."
+  englishTranslation   String?
+
+  aiThread AiThreads?
+  verdict   String?
+  toxic     Float?
+  isHidden  Boolean   @default(false) // hide if reported
+}
+
+
+model ThreadEdits {
+  teid      Int @id @default(autoincrement())
+  thread   Threads @relation(fields: [tid], references: [tid])
+  tid       Int
+
+  oldTitle     String @default("")
+  oldText      String    @default("")
+  oldDate     DateTime
+  oldTags      String  @default("")  // In the form of "tag1,tag2,tag3..."
+  oldVerdict   String?
+  oldToxic     Float?
+
+}
+
+model Comment {
+  cid       Int @id @default(autoincrement())
+  owner     User  @relation("UserPosts", fields: [ownerId], references: [uid])
+  ownerId   Int
+  thread    Threads @relation(fields: [threadId], references: [tid])
+  threadId  Int
+  
+  replies   Comment[]   @relation("replies")
+  parentComment   Comment? @relation("replies", fields: [parentCommentId], references: [cid]) // reply to commen
+  parentCommentId Int?
+  date      DateTime @default(now())
+  text      String    @default("")
+  englishTranslation   String?
+
+  edits     CommentEdits[]
+  poll      Poll[]
+  reports   Reports[]
+  aiComment AiComments?
+  verdict   String?
+  toxic     Float?
+  isHidden  Boolean   @default(false) // hide if reported
+}
+
+model CommentEdits {
+  ceid      Int @id @default(autoincrement())
+  comment   Comment @relation(fields: [cid], references: [cid])
+  cid       Int
+
+  oldText      String    @default("")
+  oldDate    DateTime
+  oldVerdict   String?
+  oldToxic     Float?
+
+}
+
+model PollVotes{
+  option Int  // 1, 2, 3, 4
+
+  user User @relation(fields: [userId], references: [uid])
+  userId Int
+
+  poll Poll @relation(fields: [pollId], references: [pid])
+  pollId Int
+
+  @@id([userId, pollId])
+}
+
+
+model Poll {
+  pid       Int @id @default(autoincrement())
+  
+  comment   Comment @relation(fields: [commentId], references: [cid])
+  commentId Int
+
+  datePosted DateTime @default(now())
+  deadline  DateTime
+
+  edits     PollEdits[]
+
+  option1   String?
+  option2   String?
+  option3   String?
+  option4   String?
+
+  option1Score  Int?
+  option2Score  Int?
+  option3Score  Int?
+  option4Score  Int?
+
+  votes PollVotes[]
+
+  disabled  Boolean   @default(false)
+  isHidden  Boolean   @default(false)
+}
+
+model PollEdits {
+  peid       Int @id @default(autoincrement())
+  poll      Poll  @relation(fields: [pid], references: [pid])
+  pid       Int
+  oldDate DateTime
+  oldDeadline  DateTime
+
+  oldOption1   String?
+  oldOption2   String?
+  oldOption3   String?
+  oldOption4   String?
+}
+
+model Reports {
+  rid       Int @id @default(autoincrement())
+  comment   Comment? @relation(fields: [commentId], references: [cid])// comment being reported
+  commentId Int?
+  thread    Threads? @relation(fields: [threadId], references: [tid])// thread being reported 
+  threadId  Int?
+  user      User @relation(fields: [userId], references: [uid]) // makes the report
+  userId    Int
+  text      String
+  createdAt DateTime  @default(now())
+}
+
+model Timestamp {
+  key       String   @id
+  updatedAt DateTime
+}
+
+model AiThreads {
+  thread   Threads @relation(fields: [threadId], references: [tid], onDelete: Cascade)
+  threadId Int     @id                 // one queue row per thread
+  createdAt DateTime @default(now())
+}
+
+
+model AiComments {
+  comment   Comment @relation(fields: [commentId], references: [cid], onDelete: Cascade)
+  commentId Int     @id                // one queue row per comment
+  createdAt DateTime @default(now())
+}
+
+
+
+model digest{
+  digest Int @id @default(autoincrement())
+  date DateTime @default(now())
+  text String @default("")
+}

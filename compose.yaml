@@ -1,0 +1,35 @@
+services:
+
+  nextjs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - postgresDB
+    ports:
+      - 3000:3000
+      - 5555:5555
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+  postgresDB:
+     image: postgres:16
+     restart: always
+     
+     volumes:
+       - db-data:/var/lib/postgresql/data
+     environment:
+        POSTGRES_DB: ${POSTGRES_DB}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+     ports:
+      - 5432:5432
+    
+     healthcheck:
+       test: ["CMD", "pg_isready", "-U", "postgres"]
+       interval: 10s
+       timeout: 5s
+       retries: 5
+
+volumes:
+  db-data:
